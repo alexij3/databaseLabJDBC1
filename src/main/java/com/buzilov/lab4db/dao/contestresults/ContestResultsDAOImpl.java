@@ -1,63 +1,86 @@
 package com.buzilov.lab4db.dao.contestresults;
 
+import com.buzilov.lab4db.dao.artist.ArtistDAOImpl;
+import com.buzilov.lab4db.dao.contestinpalace.ContestInPalaceDAOImpl;
 import com.buzilov.lab4db.datastorage.DataStorageFake;
 import com.buzilov.lab4db.datastorage.DataStorageJdbc;
+import com.buzilov.lab4db.model.Artist;
+import com.buzilov.lab4db.model.ContestInPalace;
 import com.buzilov.lab4db.model.ContestResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class ContestResultsDAOImpl implements ContestResultsDAO {
     @Autowired
-    DataStorageFake dataStorage;
-
-    @Autowired
     DataStorageJdbc dataStorageJdbc;
 
+    @Autowired
+    ContestInPalaceDAOImpl contestInPalaceDAO;
+
+    @Autowired
+    ArtistDAOImpl artistDAO;
+
+    Connection con;
+    Statement statement;
+
     @Override
-    public ContestResults insertContestResults(ContestResults contestResults ) {
-        dataStorage.getContestResults().add(contestResults);
-        return contestResults;
+    public ContestResults insert(ContestResults contestResult) throws SQLException {
+        con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+
+        PreparedStatement insert;
+        String insertContestResult = "INSERT INTO contest_results (id_contest, id_artist, place, is_winner) VALUES (?, ?, ?, ?)";
+        insert = con.prepareStatement(insertContestResult);
+        insert.setInt(1, contestResult.getContestId());
+        insert.setInt(2, contestResult.getArtistId());
+        insert.setInt(3, contestResult.getPlace());
+        insert.setString(4, String.valueOf(contestResult.getIsWinner()));
+        insert.executeUpdate();
+
+        con.close();
+        return contestResult;
     }
 
     @Override
-    public ContestResults getContestResults(int id) {
-        return dataStorage.getContestResults().stream()
-                .filter(el -> el.getContest().getId() == id)
-                .findFirst().orElse(null);
+    public ContestResults get(int id) {
+        return null;
     }
 
     @Override
-    public ContestResults updateContestResults(ContestResults contestResults ) {
-        for(ContestResults cm: dataStorage.getContestResults())
-        {
-            if(cm.getContest().getId() == contestResults.getContest().getId())
-            {
-                cm.setContest(contestResults.getContest());
-                cm.setArtist(contestResults.getArtist());
-                cm.setPlace(contestResults.getPlace());
-                cm.setIsWinner(contestResults.getIsWinner());
-                break;
-            }
+    public ContestResults update(ContestResults contestResult) {
+        return null;
+    }
+
+    @Override
+    public void delete(int id) {
+
+    }
+
+    @Override
+    public List<ContestResults> getAll() throws SQLException {
+        con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+        statement = con.createStatement();
+
+        List <ContestResults> list = new ArrayList<>();
+        ResultSet rs = statement.executeQuery("SELECT * FROM contest_results");
+
+        while (rs.next()){
+            list.add(new ContestResults(rs.getInt("id_contest"), rs.getInt("id_artist"),
+                    rs.getInt("place"), rs.getString("is_winner").charAt(0)));
         }
-        return contestResults;
-    }
 
-    @Override
-    public ContestResults deleteContestResults(int id) {
-        ContestResults contestResults  = dataStorage.getContestResults()
-                .stream()
-                .filter(el -> el.getContest().getId() == id)
-                .findFirst()
-                .get();
-        dataStorage.getArtists().remove(contestResults);
-        return contestResults;
-    }
+        List<Artist> artists = artistDAO.getAll();
+        List<ContestInPalace> contestInPalaces = contestInPalaceDAO.getAll();
 
-    @Override
-    public List<ContestResults> getAll() {
-        return dataStorage.getContestResults();
+        for (ContestResults c : list){
+            c.setArtist(artists.stream().filter(el->el.getId() == c.getArtistId()).findFirst().orElse(null));
+            c.setContest(contestInPalaces.stream().filter(el->el.getId() == c.getContestId()).findFirst().orElse(null));
+        }
+
+        return list;
     }
 }

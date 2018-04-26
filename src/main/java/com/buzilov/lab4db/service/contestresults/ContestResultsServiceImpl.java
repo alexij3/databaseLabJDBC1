@@ -5,6 +5,7 @@ import com.buzilov.lab4db.model.ContestResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -13,27 +14,27 @@ public class ContestResultsServiceImpl implements ContestResultsService {
     ContestResultsDAOImpl contestResultsDAO;
 
     @Override
-    public ContestResults insertContestResults(ContestResults contest) {
-        return contestResultsDAO.insertContestResults(contest);
+    public ContestResults insert(ContestResults contest) throws SQLException {
+        return contestResultsDAO.insert(contest);
     }
 
     @Override
-    public ContestResults getContestResults(int id) {
-        return contestResultsDAO.getContestResults(id);
+    public ContestResults get(int id) throws SQLException {
+        return contestResultsDAO.get(id);
     }
 
     @Override
-    public ContestResults updateContestResults(ContestResults contest) {
-        return contestResultsDAO.updateContestResults(contest);
+    public ContestResults update(ContestResults contest) throws SQLException {
+        return contestResultsDAO.update(contest);
     }
 
     @Override
-    public ContestResults deleteContestResults(int id) {
-        return contestResultsDAO.deleteContestResults(id);
+    public void delete(int id) throws SQLException {
+        contestResultsDAO.delete(id);
     }
 
     @Override
-    public List<ContestResults> getAll() {
+    public List<ContestResults> getAll() throws SQLException {
         return contestResultsDAO.getAll();
     }
 }

@@ -87,7 +87,7 @@ public class ContestInPalaceDAOImpl implements ContestInPalaceDAO {
         statement = con.createStatement();
 
         List <ContestInPalace> list = new ArrayList<>();
-        ResultSet rs = statement.executeQuery("SELECT id_contest, name, id_palace, id_organizer, date" +
+        ResultSet rs = statement.executeQuery("SELECT *" +
                                                 " FROM contest_in_palace");
 
         while (rs.next()){

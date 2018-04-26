@@ -5,10 +5,21 @@ import java.util.Map;
 
 public class ContestResults {
     private ContestInPalace contest;
+    private int contestId;
     private Artist artist;
+    private int artistId;
     private int place;
     private char isWinner;
 
+    public ContestResults() {
+    }
+
+    public ContestResults(int contestId, int artistId, int place, char isWinner) {
+        this.contestId = contestId;
+        this.artistId = artistId;
+        this.place = place;
+        this.isWinner = isWinner;
+    }
 
     public ContestResults(ContestInPalace contest, Artist artist, int place, char isWinner) {
         this.contest = contest;
@@ -47,6 +58,22 @@ public class ContestResults {
 
     public void setIsWinner(char isWinner) {
         this.isWinner = isWinner;
+    }
+
+    public int getContestId() {
+        return contestId;
+    }
+
+    public void setContestId(int contestId) {
+        this.contestId = contestId;
+    }
+
+    public int getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(int artistId) {
+        this.artistId = artistId;
     }
 
     @Override

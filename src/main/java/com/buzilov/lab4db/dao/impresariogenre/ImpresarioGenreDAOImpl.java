@@ -1,5 +1,6 @@
 package com.buzilov.lab4db.dao.impresariogenre;
 
+import com.buzilov.lab4db.dao.impresario.ImpresarioDAOImpl;
 import com.buzilov.lab4db.datastorage.DataStorageJdbc;
 import com.buzilov.lab4db.model.Genre;
 import com.buzilov.lab4db.model.Impresario;
@@ -16,6 +17,9 @@ public class ImpresarioGenreDAOImpl implements ImpresarioGenreDAO {
     @Autowired
     DataStorageJdbc dataStorageJdbc;
 
+    @Autowired
+    ImpresarioDAOImpl impresarioDAO;
+
     Connection con;
     Statement statement;
 
@@ -25,16 +29,15 @@ public class ImpresarioGenreDAOImpl implements ImpresarioGenreDAO {
     }
 
     @Override
-    public ImpresarioGenre update(ImpresarioGenre impresarioGenre) throws SQLException {
+    public ImpresarioGenre update(String oldGenre, ImpresarioGenre impresarioGenre) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
 
-        System.out.println(impresarioGenre.getImpresario().getId());
-        System.out.println(impresarioGenre.getGenre().toString());
         PreparedStatement update;
-        String updateImpresarioGenre = "UPDATE impresario_and_genre SET genre = ? WHERE id_impresario = ?";
+        String updateImpresarioGenre = "UPDATE impresario_and_genre SET genre = ? WHERE id_impresario = ? AND genre = ?";
         update = con.prepareStatement(updateImpresarioGenre);
         update.setString(1, impresarioGenre.getGenre().toString());
-        update.setInt(2, impresarioGenre.getImpresario().getId());
+        update.setInt(2, impresarioGenre.getImpresarioId());
+        update.setString(3, oldGenre);
         System.out.println(update.executeUpdate());
 
         con.close();
@@ -56,13 +59,14 @@ public class ImpresarioGenreDAOImpl implements ImpresarioGenreDAO {
     }
 
     @Override
-    public ImpresarioGenre insert(ImpresarioGenre impresarioGenre) throws SQLException {
+    public synchronized ImpresarioGenre insert(ImpresarioGenre impresarioGenre) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+        System.out.println(impresarioGenre.getImpresarioId());
 
         PreparedStatement insert;
         String insertImpresarioGenre = "INSERT INTO impresario_and_genre (id_impresario, genre) VALUES (?, ?)";
         insert = con.prepareStatement(insertImpresarioGenre);
-        insert.setInt(1, impresarioGenre.getImpresario().getId());
+        insert.setInt(1, impresarioGenre.getImpresarioId());
         insert.setString(2, impresarioGenre.getGenre().toString());
         insert.executeUpdate();
 
@@ -71,18 +75,20 @@ public class ImpresarioGenreDAOImpl implements ImpresarioGenreDAO {
     }
 
     @Override
-    public List<ImpresarioGenre> getAll() throws SQLException {
+    public synchronized List<ImpresarioGenre> getAll() throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
 
         List<ImpresarioGenre> list = new ArrayList<>();
-        ResultSet rs = dataStorageJdbc.executeQuery("SELECT impresario.id, name, genre FROM impresario_and_genre RIGHT OUTER JOIN impresario\n" +
-                "ON impresario_and_genre.id_impresario = impresario.id");
+        ResultSet rs = statement.executeQuery("SELECT id_impresario, genre FROM impresario_and_genre");
 
         while (rs.next()){
-            list.add(new ImpresarioGenre(new Impresario(rs.getInt("impresario.id"), rs.getString("name"))));
-            if (rs.getString("genre") != null) list.get(list.size()-1).setGenre(Genre.valueOf(rs.getString("genre")));
+            list.add(new ImpresarioGenre(rs.getInt("id_impresario"), Genre.valueOf(rs.getString("genre"))));
         }
+
+        List <Impresario> impresarios = impresarioDAO.getAll();
+        for (ImpresarioGenre impresarioGenre : list)
+            impresarioGenre.setImpresario(impresarios.stream().filter(el->el.getId() == impresarioGenre.getImpresarioId()).findFirst().orElse(null));
 
         statement.close();
         con.close();

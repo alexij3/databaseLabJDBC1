@@ -1,5 +1,7 @@
 package com.buzilov.lab4db.dao.concertinhall;
 
+import com.buzilov.lab4db.dao.concerthall.ConcertHallDAOImpl;
+import com.buzilov.lab4db.dao.organizer.OrganizerDAOImpl;
 import com.buzilov.lab4db.datastorage.DataStorageFake;
 import com.buzilov.lab4db.datastorage.DataStorageJdbc;
 import com.buzilov.lab4db.model.ConcertHall;
@@ -21,20 +23,26 @@ public class ConcertInHallDAOImpl implements ConcertInHallDAO {
     @Autowired
     DataStorageJdbc dataStorageJdbc;
 
+    @Autowired
+    OrganizerDAOImpl organizerDAO;
+
+    @Autowired
+    ConcertHallDAOImpl concertHallDAO;
+
     Connection con;
     Statement statement;
 
     @Override
-    public ConcertInHall insert(ConcertInHall concertInHall)  throws SQLException {
-        System.out.println("insert concerthall " + concertInHall);
+    public ConcertInHall insert(ConcertInHall concertInHall) throws SQLException {
+        System.out.println("insert concertHall " + concertInHall);
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
 
         PreparedStatement insert;
         String insertConcertInHall = "INSERT INTO concert_in_hall (id_concert_hall, name, id_organizer, date) VALUES (?, ?, ?, ?)";
         insert = con.prepareStatement(insertConcertInHall);
-        insert.setInt(1, concertInHall.getConcertHall().getId());
+        insert.setInt(1, concertInHall.getConcertHallId());
         insert.setString(2, concertInHall.getName());
-        insert.setInt(3, concertInHall.getOrganizer().getId());
+        insert.setInt(3, concertInHall.getOrganizerId());
         insert.setDate(4, java.sql.Date.valueOf(concertInHall.getDate()));
         insert.executeUpdate();
 
@@ -48,25 +56,25 @@ public class ConcertInHallDAOImpl implements ConcertInHallDAO {
     }
 
     @Override
-    public ConcertInHall update(ConcertInHall concertInHall)  throws SQLException{
+    public ConcertInHall update(ConcertInHall concertHall) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         PreparedStatement update;
         String updateConcertInHall = "UPDATE concert_in_hall SET id_concert_hall = ?, name = ?, id_organizer = ?, date = ? where id = ?";
-        System.out.println(concertInHall);
+        System.out.println(concertHall);
         update = con.prepareStatement(updateConcertInHall);
-        update.setInt(1, concertInHall.getConcertHall().getId());
-        update.setString(2, concertInHall.getName());
-        update.setInt(3, concertInHall.getOrganizer().getId());
-        update.setDate(4, java.sql.Date.valueOf(concertInHall.getDate()));
-        update.setInt(5, concertInHall.getId());
+        update.setInt(1, concertHall.getConcertHallId());
+        update.setString(2, concertHall.getName());
+        update.setInt(3, concertHall.getOrganizerId());
+        update.setDate(4, java.sql.Date.valueOf(concertHall.getDate()));
+        update.setInt(5, concertHall.getId());
         update.executeUpdate();
 
         con.close();
-        return concertInHall;
+        return concertHall;
     }
 
     @Override
-    public void delete(int id)  throws SQLException{
+    public void delete(int id) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         PreparedStatement delete;
         String deleteConcertInHall = "DELETE FROM concert_in_hall WHERE id = ?";
@@ -77,35 +85,31 @@ public class ConcertInHallDAOImpl implements ConcertInHallDAO {
     }
 
     @Override
-    public List<ConcertInHall> getAll()  throws SQLException {
+    public List<ConcertInHall> getAll() throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
 
-        List<ConcertInHall> list = new ArrayList<>();
-        ResultSet rs = this.executeQuery("SELECT concert_in_hall.id, concert_in_hall.name, id_concert_hall, concert_hall.name, concert_hall.address, concert_hall.capacity, concert_in_hall.name " +
-                ", id_organizer, organizer.name, date FROM concert_in_hall" +
-                "\nJOIN concert_hall ON concert_hall.id = id_concert_hall" +
-                "\nJOIN organizer ON id_organizer = organizer.id" +
-                "\nORDER BY concert_in_hall.id");
+        List <ConcertInHall> list = new ArrayList<>();
+        ResultSet rs = statement.executeQuery("SELECT *" +
+                " FROM concert_in_hall");
 
         while (rs.next()){
-            list.add(new ConcertInHall(rs.getInt("id"), new ConcertHall(rs.getInt("id_concert_hall"),
-                    rs.getString("concert_hall.name"), rs.getString("concert_hall.address"),
-                    rs.getInt("concert_hall.capacity")), rs.getInt("id_concert_hall"), rs.getString("concert_in_hall.name"), new Organizer(
-                            rs.getInt("id_organizer"), rs.getString("organizer.name")), rs.getInt("id_organizer"),
+            list.add(new ConcertInHall(rs.getInt("id"),
+                    rs.getInt("id_concert_hall"), rs.getString("name"), rs.getInt("id_organizer"),
                     rs.getDate("date").toLocalDate()));
         }
 
-        con.close();
-        statement.close();
+        List<ConcertHall> concertHalls = concertHallDAO.getAll();
+        List<Organizer> organizers = organizerDAO.getAll();
+
+        for (ConcertInHall concertInHall : list){
+            concertInHall.setConcertHall(concertHalls.stream()
+                    .filter(el -> el.getId() == concertInHall.getConcertHallId())
+                    .findFirst().orElse(null));
+            concertInHall.setOrganizer(organizers.stream().filter(el -> el.getId() == concertInHall.getOrganizerId())
+                    .findFirst().orElse(null));
+        }
+
         return list;
-    }
-
-    public ResultSet executeQuery(String query) throws SQLException {
-        return statement.executeQuery(query);
-    }
-
-    public int executeUpdate(String query) throws SQLException{
-        return  statement.executeUpdate(query);
     }
 }

@@ -28,46 +28,44 @@ app.controller("ConcertInHallCtrl", function($scope, $http){
             console.log(selectConcertHallUpd);
         }
 
+        $http.get('/api/organizer/showAll').then(function(response){
+            var organizers = response.data;
+            var select = document.getElementById('ConcertInHallOrganizer');
+            var selectOrganizersUpd = document.getElementById('updateConcertInHallOrganizer');
+
+            for (var i = 0; i < organizers.length; i++) {
+                var option = document.createElement("option");
+                option.text = organizers[i].name;
+                option.value = organizers[i].id;
+
+                select.add(option);
+
+                console.log(select);
+            }
+
+            for (var j = 0; j < organizers.length; j++) {
+                var option2 = document.createElement("option");
+                option2.text = organizers[j].name;
+                option2.value = organizers[j].id;
+
+                selectOrganizersUpd.add(option2);
+
+                console.log(selectOrganizersUpd);
+            }
+        });
 
     });
 
-    $http.get('/api/organizer/showAll').then(function(response){
-        var organizers = response.data;
-        var select = document.getElementById('ConcertInHallOrganizer');
-        var selectOrganizersUpd = document.getElementById('updateConcertInHallOrganizer');
-
-        for (var i = 0; i < organizers.length; i++) {
-            var option = document.createElement("option");
-            option.text = organizers[i].name;
-            option.value = organizers[i].id;
-
-            select.add(option);
-
-            console.log(select);
-        }
-
-        for (var j = 0; j < organizers.length; j++) {
-            var option2 = document.createElement("option");
-            option2.text = organizers[j].name;
-            option2.value = organizers[j].id;
-
-            selectOrganizersUpd.add(option2);
-
-            console.log(selectOrganizersUpd);
-        }
-    });
-
-    $scope.concertInHalls = [];
-     $http.get('/api/concertinhall/showall').then(function (response){
-        $scope.concertInHalls=response.data;
+    $scope.contestInPalaces = [];
+    $http.get('/api/concertinhall/showall').then(function (response){
+        $scope.contestInPalaces=response.data;
         console.log(response);
     });
 
     this.deleteConcertInHall = function deleteConcertInHall(id){
-        $http.get('/api/concertinhall/delete?id=' + id).then(function(response){
-            console.log(response);
+        $http.post('/api/concertinhall/delete?id=' + id).then(function(response){
             window.location.reload();
-
+            console.log(response);
         });
     };
 
@@ -85,25 +83,22 @@ app.controller("ConcertInHallCtrl", function($scope, $http){
         var organizerId = document.getElementById('ConcertInHallOrganizer').value;
         var date = document.getElementById('datePicker').value;
 
-        //window.alert(date);
         var request = {
             method: 'PUT',
             url: '/api/concertinhall/insert',
             data: {
-                id: 0,
-                concertHall : null,
+                name : name,
                 concertHallId : concertHallId,
-                name: name,
-                organizer : null,
                 organizerId: organizerId,
-                date: date
+                date : date
             }
         };
 
         $http(request).then(function(response){
             window.location.reload();
-            console.log(response);
-        });
+        })
+
+        //window.alert(date);
     };
 
     this.startUpdateConcertInHall = function startUpdateConcertInHall(id, name, concertHallId, organizerId, date) {
@@ -123,12 +118,11 @@ app.controller("ConcertInHallCtrl", function($scope, $http){
 
         var request = {
             method: 'POST',
-            url : '/api/concertinhall/update?id=' + idToUpdate,
+            url : '/api/concertinhall/update',
             data: {
-                concertHall : null,
+                id: idToUpdate,
                 concertHallId : concertHallId,
                 name: name,
-                organizer : null,
                 organizerId: organizerId,
                 date: date
             }

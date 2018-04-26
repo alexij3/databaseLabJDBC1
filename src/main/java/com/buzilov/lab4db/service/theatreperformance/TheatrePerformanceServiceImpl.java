@@ -5,6 +5,7 @@ import com.buzilov.lab4db.model.TheatrePerformance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -13,27 +14,27 @@ public class TheatrePerformanceServiceImpl implements TheatrePerformanceService 
     TheatrePerformanceDAOImpl theatrePerformanceDAO;
 
     @Override
-    public TheatrePerformance insertTheatrePerformance(TheatrePerformance theatrePerformance) {
-        return theatrePerformanceDAO.insertTheatrePerformance(theatrePerformance);
+    public TheatrePerformance insert(TheatrePerformance theatrePerformance) throws SQLException {
+        return theatrePerformanceDAO.insert(theatrePerformance);
     }
 
     @Override
-    public TheatrePerformance getTheatrePerformance(int id) {
-        return theatrePerformanceDAO.getTheatrePerformance(id);
+    public TheatrePerformance get(int id) throws SQLException {
+        return theatrePerformanceDAO.get(id);
     }
 
     @Override
-    public TheatrePerformance updateTheatrePerformance(TheatrePerformance theatrePerformance) {
-        return theatrePerformanceDAO.updateTheatrePerformance(theatrePerformance);
+    public TheatrePerformance update(TheatrePerformance theatrePerformance) throws SQLException {
+        return theatrePerformanceDAO.update(theatrePerformance);
     }
 
     @Override
-    public TheatrePerformance deleteTheatrePerformance(int id) {
-        return theatrePerformanceDAO.deleteTheatrePerformance(id);
+    public void delete(int id) throws SQLException {
+        theatrePerformanceDAO.delete(id);
     }
 
     @Override
-    public List<TheatrePerformance> getAll() {
+    public List<TheatrePerformance> getAll() throws SQLException {
         return theatrePerformanceDAO.getAll();
     }
 }

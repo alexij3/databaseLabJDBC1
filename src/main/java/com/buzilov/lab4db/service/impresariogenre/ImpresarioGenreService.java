@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ImpresarioGenreService {
     ImpresarioGenre get(int id) throws SQLException;
-    ImpresarioGenre update(ImpresarioGenre impresarioGenre) throws SQLException;
+    ImpresarioGenre update(String oldGenre, ImpresarioGenre impresarioGenre) throws SQLException;
     void delete(int id, Genre genre) throws SQLException;
     ImpresarioGenre insert(ImpresarioGenre impresarioGenre) throws SQLException;
     List<ImpresarioGenre> getAll() throws SQLException;

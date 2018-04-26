@@ -20,8 +20,8 @@ public class ImpresarioGenreServiceImpl implements ImpresarioGenreService{
     }
 
     @Override
-    public ImpresarioGenre update(ImpresarioGenre impresarioGenre) throws SQLException {
-        return impresarioGenreDAO.update(impresarioGenre);
+    public ImpresarioGenre update(String oldGenre, ImpresarioGenre impresarioGenre) throws SQLException {
+        return impresarioGenreDAO.update(oldGenre, impresarioGenre);
     }
 
     @Override

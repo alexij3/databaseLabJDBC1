@@ -1,15 +1,29 @@
 package com.buzilov.lab4db.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class TheatrePerformance {
     private int id;
     private Theatre theatre;
+    private int theatreId;
     private String name;
     private Organizer organizer;
-    private Date date;
+    private int organizerId;
+    private LocalDate date;
 
-    public TheatrePerformance(int id, String name, Theatre theatre, Organizer organizer, Date date) {
+    public TheatrePerformance() {
+    }
+
+    public TheatrePerformance(int id, int theatreId, String name, int organizerId, LocalDate date) {
+        this.id = id;
+        this.theatreId = theatreId;
+        this.name = name;
+        this.organizerId = organizerId;
+        this.date = date;
+    }
+
+    public TheatrePerformance(int id, String name, Theatre theatre, Organizer organizer, LocalDate date) {
         this.id = id;
         this.theatre = theatre;
         this.name = name;
@@ -60,11 +74,27 @@ public class TheatrePerformance {
         this.organizer = organizer;
     }
 
-    public Date getDate() {
+    public int getTheatreId() {
+        return theatreId;
+    }
+
+    public void setTheatreId(int theatreId) {
+        this.theatreId = theatreId;
+    }
+
+    public int getOrganizerId() {
+        return organizerId;
+    }
+
+    public void setOrganizerId(int organizerId) {
+        this.organizerId = organizerId;
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

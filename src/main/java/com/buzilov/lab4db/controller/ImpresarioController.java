@@ -17,7 +17,7 @@ public class ImpresarioController {
     @Autowired
     ImpresarioServiceImpl service;
 
-    @RequestMapping("/showAll")
+    @RequestMapping("/showall")
     public List<Impresario> getAll() throws SQLException  {
         return service.getAll();
     }

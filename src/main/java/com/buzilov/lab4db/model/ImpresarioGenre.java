@@ -2,9 +2,15 @@ package com.buzilov.lab4db.model;
 
 public class ImpresarioGenre {
     private Impresario impresario;
+    private int impresarioId;
     private Genre genre;
 
     public ImpresarioGenre() {
+    }
+
+    public ImpresarioGenre(int impresarioId, Genre genre) {
+        this.impresarioId = impresarioId;
+        this.genre = genre;
     }
 
     public ImpresarioGenre(Impresario impresario) {
@@ -30,6 +36,16 @@ public class ImpresarioGenre {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public int getImpresarioId() {
+        return impresarioId;
+    }
+
+
+
+    public void setImpresarioId(int impresarioId) {
+        this.impresarioId = impresarioId;
     }
 
     @Override

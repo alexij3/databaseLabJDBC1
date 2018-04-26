@@ -248,7 +248,7 @@ public class DataStorageFake {
     );
 
     public List<TheatrePerformance> theatrePerformances = new ArrayList<>(
-            Arrays.asList(
+           /* Arrays.asList(
                 new TheatrePerformance(1, "Перший виступ", theatres.get(0), organizers.get(0), new Date(2018-02-14)),
                 new TheatrePerformance(2, "Другий виступ", theatres.get(1), organizers.get(0), new Date(2018-01-27)),
                 new TheatrePerformance(3, "Третій виступ", theatres.get(2), organizers.get(1), new Date(2018-02-04)),
@@ -257,7 +257,7 @@ public class DataStorageFake {
                 new TheatrePerformance(6, "Шостий виступ", theatres.get(5), organizers.get(4), new Date(2018-03-02)),
                 new TheatrePerformance(7, "Сьомий виступ", theatres.get(6), organizers.get(5), new Date(2018-03-03)),
                 new TheatrePerformance(8, "Восьмий виступ", theatres.get(7), organizers.get(6), new Date(2018-03-04))
-            )
+            )*/
     );
 
     public List<TheatrePerformance> getTheatrePerformances() {

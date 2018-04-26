@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ImpresarioGenreDAO {
     ImpresarioGenre get(int id) throws SQLException;
-    ImpresarioGenre update(ImpresarioGenre artistGenre) throws SQLException;
+    ImpresarioGenre update(String oldGenre, ImpresarioGenre impresarioGenre) throws SQLException;
     void delete(int id, Genre genre) throws SQLException;
-    ImpresarioGenre insert(ImpresarioGenre artistGenre) throws SQLException;
+    ImpresarioGenre insert(ImpresarioGenre impresarioGenre) throws SQLException;
     List<ImpresarioGenre> getAll() throws SQLException;
 }

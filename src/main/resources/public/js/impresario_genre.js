@@ -2,29 +2,38 @@ var app = angular.module("demo", []);
 
 app.controller("ImpresarioGenreCtrl", function($scope, $http) {
     var impresarioId;
+    var oldGenre;
     var genres = [];
 
     $scope.impresarios = [];
     $http.get('/api/impresariogenre/showgenres').then(function (response) {
         $scope.impresarios = response.data;
+
     });
 
 
-    this.startAddGenre = function startAddGenre(id, name) {
-        impresarioId = id;
-        document.getElementById('labelImpresario').innerHTML = name;
+    $http.get('/api/impresario/showall').then(function(response){
+        var impresarios = response.data;
+        var select = document.getElementById('selectedImpresario');
+        for (var i = 0; i < impresarios.length; i++){
+            var option = document.createElement("option");
+            option.text = impresarios[i].name;
+            option.value = impresarios[i].id;
+
+            select.add(option);
+        }
+    });
 
 
-    };
 
     this.addGenre = function addGenre(){
+        impresarioId = document.getElementById('selectedImpresario').value;
         genres = $scope.selectedGenres;
         for (var i = 0; i < genres.length; i++){
             var request = {
                 method: 'PUT',
                 url: '/api/impresariogenre/insertgenre?id=' + impresarioId,
                 data: {
-                    impresario : null,
                     genre : genres[i]
                 }
             };
@@ -35,10 +44,11 @@ app.controller("ImpresarioGenreCtrl", function($scope, $http) {
         }
     };
 
-    this.startUpdateGenres = function startUpdateGenres(id, name){
+    this.startUpdateGenres = function startUpdateGenres(id, name, genre){
         impresarioId = id;
+        oldGenre = genre;
         document.getElementById('updLabelImpresario').innerHTML = name;
-        document.getElementById('selectedGenre').value = "Комедія";
+        document.getElementById('selectedGenre').value = genre;
 
     };
 
@@ -46,9 +56,9 @@ app.controller("ImpresarioGenreCtrl", function($scope, $http) {
         var genre = document.getElementById('selectGenre').value;
         var request = {
             method: 'PUT',
-            url: '/api/impresariogenre/updategenre?id=' + impresarioId,
+            url: '/api/impresariogenre/updategenre?oldGenre=' + oldGenre,
             data: {
-                impresario : null,
+                impresarioId : impresarioId,
                 genre : genre
             }
         };

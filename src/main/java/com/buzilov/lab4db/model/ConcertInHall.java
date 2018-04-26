@@ -15,6 +15,14 @@ public class ConcertInHall {
     public ConcertInHall() {
     }
 
+    public ConcertInHall(Integer id, int concertHallId, String name, int organizerId, LocalDate date) {
+        this.id = id;
+        this.concertHallId = concertHallId;
+        this.name = name;
+        this.organizerId = organizerId;
+        this.date = date;
+    }
+
     public ConcertInHall(ConcertHall concertHall, int concertHallId, String name, Organizer organizer, int organizerId, LocalDate date) {
         this.concertHall = concertHall;
         this.concertHallId = concertHallId;
@@ -102,4 +110,6 @@ public class ConcertInHall {
     public void setOrganizerId(int organizerId) {
         this.organizerId = organizerId;
     }
+
+
 }

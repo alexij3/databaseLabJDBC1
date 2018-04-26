@@ -21,7 +21,9 @@
                 <th>ІД</th>
                 <th>Імпресаріо</th>
                 <th>Жанр</th>
-                <th width="200px"></th>
+                <th width="200px">
+                    <button type="create" class="btn-success" data-toggle="modal" data-target="#addModal">Додати</button>
+                </th>
             </tr>
             </thead>
 
@@ -32,9 +34,8 @@
                 <td>{{item.impresario.name}}</td>
                 <td>{{item.genre.toString()}}</td>
                 <td>
-                    <button type="create" class="btn-success" data-toggle="modal" data-target="#addModal" ng-click="impresarioGenreCtrl.startAddGenre(item.impresario.id, item.impresario.name)">Створити</button>
-                    <button id="update" ng-click="impresarioGenreCtrl.startUpdateGenres(item.impresario.id, item.impresario.name, item.genre.toString())" class="btn-warning" data-toggle="modal" data-target="#editModal">Edit</button>
-                    <button id="delete" ng-click="impresarioGenreCtrl.deleteGenre(item.impresario.id, item.genre.toString())" class="btn-danger">Del</button>
+                    <button id="update" ng-click="impresarioGenreCtrl.startUpdateGenres(item.impresario.id, item.impresario.name, item.genre.toString())" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
+                    <button id="delete" ng-click="impresarioGenreCtrl.deleteGenre(item.impresario.id, item.genre.toString())" class="btn-danger">Видалити</button>
                 </td>
             </tr>
             </tbody>
@@ -49,8 +50,9 @@
                     <h4 class="modal-title">Додавання</h4>
                 </div>
                 <div class="modal-body">
-                    <label>Артист: </label>
-                    <span id="labelImpresario"></span> <br>
+                    <label>Імпресаріо:  </label>
+                    <select id="selectedImpresario">
+                    </select><br>
                     <label>Жанри:</label>
                     <select multiple ng-model="selectedGenres" id="selectGenres" name="selectGenres" title="Жанри">
                         <option>Комедія</option>
@@ -84,7 +86,7 @@
                     <h4 class="modal-title">Редагування</h4>
                 </div>
                 <div class="modal-body">
-                    <label>Артист: </label>
+                    <label>Імпресаріо:  </label>
                     <span id="updLabelImpresario"></span> <br>
                     <select ng-model="selectedGenre" id="selectGenre" name="selectGenre" title="Жанри">
                         <option>Комедія</option>

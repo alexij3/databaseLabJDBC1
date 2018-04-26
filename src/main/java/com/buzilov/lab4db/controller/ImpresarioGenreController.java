@@ -29,9 +29,7 @@ public class ImpresarioGenreController {
 
     @RequestMapping("/insertgenre")
     public ImpresarioGenre insertGenre(@RequestParam("id") int id, @RequestBody ImpresarioGenre impresarioGenre) throws SQLException{
-        Impresario impresario = impresarioService.get(id);
-        impresarioGenre.setImpresario(impresario);
-        System.out.println(impresarioGenre);
+        impresarioGenre.setImpresarioId(id);
         return impresarioGenreService.insert(impresarioGenre);
     }
 
@@ -41,10 +39,8 @@ public class ImpresarioGenreController {
     }
 
     @RequestMapping("/updategenre")
-    public ImpresarioGenre updateGenre(@RequestParam("id") int id, @RequestBody ImpresarioGenre impresarioGenre) throws SQLException{
-        Impresario impresario = impresarioService.get(id);
-        impresarioGenre.setImpresario(impresario);
+    public ImpresarioGenre updateGenre(@RequestParam("oldGenre") String oldGenre, @RequestBody ImpresarioGenre impresarioGenre) throws SQLException{
         System.out.println(impresarioGenre);
-        return impresarioGenreService.update(impresarioGenre);
+        return impresarioGenreService.update(oldGenre, impresarioGenre);
     }
 }

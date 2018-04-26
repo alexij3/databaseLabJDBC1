@@ -30,6 +30,7 @@ public class CinemaController {
 
     @RequestMapping("/create")
     public Cinema create(@RequestBody Cinema cinema)throws SQLException{
+        System.out.println("create cinema " + cinema);
         return service.insertCinema(cinema);
     }
 

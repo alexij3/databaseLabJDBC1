@@ -1,5 +1,6 @@
 package com.buzilov.lab4db.dao.artistgenre;
 
+import com.buzilov.lab4db.dao.artist.ArtistDAOImpl;
 import com.buzilov.lab4db.datastorage.DataStorageJdbc;
 import com.buzilov.lab4db.model.Artist;
 import com.buzilov.lab4db.model.ArtistGenre;
@@ -16,6 +17,9 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
     @Autowired
     DataStorageJdbc dataStorageJdbc;
 
+    @Autowired
+    ArtistDAOImpl artistDAO;
+
     Connection con;
     Statement statement;
 
@@ -25,16 +29,19 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
     }
 
     @Override
-    public ArtistGenre update(ArtistGenre artistGenre) throws SQLException {
+    public ArtistGenre update(String oldGenre, ArtistGenre artistGenre) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+        Artist artist = artistDAO.getArtist(artistGenre.getArtistId());
+        artistGenre.setArtist(artist);
 
         System.out.println(artistGenre.getArtist().getId());
         System.out.println(artistGenre.getGenre().toString());
         PreparedStatement update;
-        String updateArtistGenre = "UPDATE artist_and_genre SET genre = ? WHERE id_artist = ?";
+        String updateArtistGenre = "UPDATE artist_and_genre SET genre = ? WHERE id_artist = ? AND genre = ?";
         update = con.prepareStatement(updateArtistGenre);
         update.setString(1, artistGenre.getGenre().toString());
         update.setInt(2, artistGenre.getArtist().getId());
+        update.setString(3, oldGenre);
         System.out.println(update.executeUpdate());
 
         con.close();
@@ -58,6 +65,8 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
     @Override
     public ArtistGenre insert(ArtistGenre artistGenre) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+        Artist artist = artistDAO.getArtist(artistGenre.getArtistId());
+        artistGenre.setArtist(artist);
 
         PreparedStatement insert;
         String insertArtistGenre = "INSERT INTO artist_and_genre (id_artist, genre) VALUES (?, ?)";
@@ -76,13 +85,15 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
         statement = con.createStatement();
 
         List<ArtistGenre> list = new ArrayList<>();
-        ResultSet rs = dataStorageJdbc.executeQuery("SELECT artist.id, name, genre FROM artist_and_genre RIGHT OUTER JOIN artist\n" +
-                "ON artist_and_genre.id_artist = artist.id");
+        ResultSet rs = statement.executeQuery("SELECT id_artist, genre FROM artist_and_genre");
 
         while (rs.next()){
-            list.add(new ArtistGenre(new Artist(rs.getInt("artist.id"), rs.getString("name"))));
-            if (rs.getString("genre") != null) list.get(list.size()-1).setGenre(Genre.valueOf(rs.getString("genre")));
+            list.add(new ArtistGenre(rs.getInt("id_artist"), Genre.valueOf(rs.getString("genre"))));
         }
+
+        List <Artist> artists = artistDAO.getAll();
+        for (ArtistGenre artistGenre : list)
+            artistGenre.setArtist(artists.stream().filter(el->el.getId() == artistGenre.getArtistId()).findFirst().orElse(null));
 
         statement.close();
         con.close();

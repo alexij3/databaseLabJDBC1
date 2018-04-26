@@ -18,9 +18,6 @@ import java.util.List;
 @RequestMapping("/api/artistgenre")
 public class ArtistGenreController {
     @Autowired
-    ArtistServiceImpl artistService;
-
-    @Autowired
     ArtistGenreServiceImpl artistGenreService;
 
     @RequestMapping("/showgenres")
@@ -30,8 +27,6 @@ public class ArtistGenreController {
 
     @RequestMapping("/insertgenre")
     public ArtistGenre insertGenre(@RequestParam("id") int id, @RequestBody ArtistGenre artistGenre) throws SQLException{
-        Artist artist = artistService.getArtist(id);
-        artistGenre.setArtist(artist);
         System.out.println(artistGenre);
         return artistGenreService.insert(artistGenre);
     }
@@ -42,10 +37,8 @@ public class ArtistGenreController {
     }
 
     @RequestMapping("/updategenre")
-    public ArtistGenre updateGenre(@RequestParam("id") int id, @RequestBody ArtistGenre artistGenre) throws SQLException{
-        Artist artist = artistService.getArtist(id);
-        artistGenre.setArtist(artist);
+    public ArtistGenre updateGenre(@RequestParam("oldGenre") String oldGenre, @RequestBody ArtistGenre artistGenre) throws SQLException{
         System.out.println(artistGenre);
-        return artistGenreService.update(artistGenre);
+        return artistGenreService.update(oldGenre, artistGenre);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ArtistGenreDAO {
     ArtistGenre get(int id) throws SQLException;
-    ArtistGenre update(ArtistGenre artistGenre) throws SQLException;
+    ArtistGenre update(String oldGenre, ArtistGenre artistGenre) throws SQLException;
     void delete(int id, Genre genre) throws SQLException;
     ArtistGenre insert(ArtistGenre artistGenre) throws SQLException;
     List<ArtistGenre> getAll() throws SQLException;

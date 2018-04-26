@@ -1,30 +1,34 @@
 package com.buzilov.lab4db.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ContestInPalace {
-    private int id;
+    private Integer id;
     private CulturePalace culturePalace;
+    private int culturePalaceId;
     private String name;
     private Organizer organizer;
-    private Date date;
+    private int organizerId;
+    private LocalDate date;
 
-    public ContestInPalace(int id, CulturePalace palace, String name, Organizer organizer, Date date) {
+    public ContestInPalace() {
+    }
+
+    public ContestInPalace(Integer id, int culturePalaceId, String name, int organizerId, LocalDate date) {
         this.id = id;
-        this.culturePalace = palace;
+        this.culturePalaceId = culturePalaceId;
         this.name = name;
-        this.organizer = organizer;
+        this.organizerId = organizerId;
         this.date = date;
     }
 
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public ContestInPalace(Integer id, CulturePalace culturePalace, String name, Organizer organizer, LocalDate date) {
         this.id = id;
+        this.culturePalace = culturePalace;
+        this.name = name;
+        this.organizer = organizer;
+        this.date = date;
     }
 
     public CulturePalace getCulturePalace() {
@@ -51,12 +55,36 @@ public class ContestInPalace {
         this.organizer = organizer;
     }
 
-    public Date getDate() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public int getCulturePalaceId() {
+        return culturePalaceId;
+    }
+
+    public void setCulturePalaceId(int culturePalaceId) {
+        this.culturePalaceId = culturePalaceId;
+    }
+
+    public int getOrganizerId() {
+        return organizerId;
+    }
+
+    public void setOrganizerId(int organizerId) {
+        this.organizerId = organizerId;
     }
 
     @Override

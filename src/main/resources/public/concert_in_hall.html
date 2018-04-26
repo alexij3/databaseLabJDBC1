@@ -36,8 +36,8 @@
                 <td>{{item.organizer.name}}</td>
                 <td>{{item.date}}</td>
                 <td>
-                    <button id="update" ng-click="concertInHallCtrl.startUpdateConcertInHall(item.id, item.name, item.genre, item.cinemaId, item.date)" class="btn-warning" data-toggle="modal" data-target="#editModal">Edit</button>
-                    <button id="delete" ng-click="concertInHallCtrl.deleteConcertInHall(item.id)" class="btn-danger">Del</button>
+                    <button id="update" ng-click="concertInHallCtrl.startUpdateConcertInHall(item.id, item.name, item.concertHall.id, item.organizer.id, item.date)" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
+                    <button id="delete" ng-click="concertInHallCtrl.deleteConcertInHall(item.id)" class="btn-danger">Видалити</button>
                 </td>
             </tr>
             </tbody>
@@ -62,7 +62,7 @@
                     <label>Організатор: </label> <br>
                     <select id="ConcertInHallOrganizer" name="updateConcertInHallOrganizer" ></select> <br>
                     <label>Дата: </label>
-                    <input type="date" name ="updateDate" id="DatePicker"/> <br>
+                    <input type="date" name ="updateDate" id="datePicker"/> <br>
                     <button id="createConcertInHallButton" ng-click="concertInHallCtrl.createConcertInHall()">Створити</button>
                 </div>
                 <div class="modal-footer">

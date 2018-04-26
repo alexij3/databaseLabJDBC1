@@ -17,6 +17,11 @@ public class OrganizerController {
     @Autowired
     OrganizerServiceImpl service;
 
+    @RequestMapping("/get")
+    public Organizer get(@RequestParam("id") int id) throws SQLException {
+        return service.get(id);
+    }
+
     @RequestMapping("/showAll")
     public List<Organizer> getAll() throws SQLException {
         return service.getAll();

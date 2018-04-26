@@ -5,6 +5,7 @@ import com.buzilov.lab4db.model.ContestInPalace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -13,27 +14,27 @@ public class ContestInPalaceServiceImpl implements ContestInPalaceService {
     ContestInPalaceDAO contestInPalaceDAO;
 
     @Override
-    public ContestInPalace insertContestInPalace(ContestInPalace contest) {
-        return contestInPalaceDAO.insertContestInPalace(contest);
+    public ContestInPalace insert(ContestInPalace contest) throws SQLException {
+        return contestInPalaceDAO.insert(contest);
     }
 
     @Override
-    public ContestInPalace getContestInPalace(int id) {
-        return contestInPalaceDAO.getContestInPalace(id);
+    public ContestInPalace get(int id) throws SQLException {
+        return contestInPalaceDAO.get(id);
     }
 
     @Override
-    public ContestInPalace updateContestInPalace(ContestInPalace contest) {
-        return contestInPalaceDAO.updateContestInPalace(contest);
+    public ContestInPalace update(ContestInPalace contest) throws SQLException {
+        return contestInPalaceDAO.update(contest);
     }
 
     @Override
-    public ContestInPalace deleteContestInPalace(int id) {
-        return contestInPalaceDAO.deleteContestInPalace(id);
+    public void delete(int id) throws SQLException {
+        contestInPalaceDAO.delete(id);
     }
 
     @Override
-    public List<ContestInPalace> getAll() {
+    public List<ContestInPalace> getAll() throws SQLException {
         return contestInPalaceDAO.getAll();
     }
 }

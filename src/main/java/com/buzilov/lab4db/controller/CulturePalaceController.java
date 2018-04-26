@@ -17,6 +17,11 @@ public class CulturePalaceController{
     @Autowired
     CulturePalaceServiceImpl service;
 
+    @RequestMapping("/get")
+    public CulturePalace get(@RequestParam("id") int id) throws SQLException {
+        return service.get(id);
+    }
+
     @RequestMapping("/showAll")
     public List<CulturePalace> getAll() throws SQLException {
             return service.getAll();

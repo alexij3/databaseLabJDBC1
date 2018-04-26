@@ -27,12 +27,11 @@ public class CinemaDAOImpl implements CinemaDAO {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
 
         PreparedStatement insert;
-        String insertCinema = "INSERT INTO cinema (id, name, address, screen_size) VALUES (?, ?, ?, ?)";
+        String insertCinema = "INSERT INTO cinema (name, address, screen_size) VALUES (?, ?, ?)";
         insert = con.prepareStatement(insertCinema);
-        insert.setInt(1, cinema.getId());
-        insert.setString(2, cinema.getName());
-        insert.setString(3, cinema.getAddress());
-        insert.setInt(4, cinema.getScreenSize());
+        insert.setString(1, cinema.getName());
+        insert.setString(2, cinema.getAddress());
+        insert.setInt(3, cinema.getScreenSize());
         insert.executeUpdate();
 
         con.close();

@@ -5,9 +5,7 @@ import com.buzilov.lab4db.service.concerthall.ConcertHallServiceImpl;
 import com.buzilov.lab4db.service.concertinhall.ConcertInHallServiceImpl;
 import com.buzilov.lab4db.service.organizer.OrganizerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -31,8 +29,24 @@ public class ConcertInHallController {
 
     @RequestMapping("/insert")
     public ConcertInHall insert(@RequestBody ConcertInHall concertInHall) throws SQLException{
+        System.out.println("insert " + concertInHall);
         concertInHall.setConcertHall(concertHallService.get(concertInHall.getConcertHallId()));
         concertInHall.setOrganizer(organizerService.get(concertInHall.getOrganizerId()));
+        //ConcertInHall concertInHall = new ConcertInHall();
+        System.out.println(concertInHall);
         return concertInHallService.insert(concertInHall);
+    }
+
+    @RequestMapping("/update")
+    public ConcertInHall update(@RequestParam("id") int id, @RequestBody ConcertInHall concertInHall) throws SQLException {
+        concertInHall.setId(id);
+        concertInHall.setConcertHall(concertHallService.get(concertInHall.getConcertHallId()));
+        concertInHall.setOrganizer(organizerService.get(concertInHall.getOrganizerId()));
+        return concertInHallService.update(concertInHall);
+    }
+
+    @RequestMapping("/delete")
+    public void delete(@RequestParam("id") int id) throws SQLException {
+        concertInHallService.delete(id);
     }
 }

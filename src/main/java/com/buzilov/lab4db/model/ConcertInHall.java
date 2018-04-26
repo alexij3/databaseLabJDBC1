@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class ConcertInHall {
-    private int id;
+    private Integer id;
     private ConcertHall concertHall;
     private int concertHallId;
     private String name;
@@ -15,7 +15,16 @@ public class ConcertInHall {
     public ConcertInHall() {
     }
 
-    public ConcertInHall(int id, ConcertHall concertHall, int concertHallId, String name, Organizer organizer, int organizerId, LocalDate date) {
+    public ConcertInHall(ConcertHall concertHall, int concertHallId, String name, Organizer organizer, int organizerId, LocalDate date) {
+        this.concertHall = concertHall;
+        this.concertHallId = concertHallId;
+        this.name = name;
+        this.organizer = organizer;
+        this.organizerId = organizerId;
+        this.date = date;
+    }
+
+    public ConcertInHall(Integer id, ConcertHall concertHall, int concertHallId, String name, Organizer organizer, int organizerId, LocalDate date) {
         this.id = id;
         this.concertHall = concertHall;
         this.concertHallId = concertHallId;
@@ -25,23 +34,15 @@ public class ConcertInHall {
         this.date = date;
     }
 
-    public ConcertInHall(int id, ConcertHall concertHall, String name, Organizer organizer, LocalDate date) {
-        this.id = id;
-        this.concertHall = concertHall;
-        this.name = name;
-        this.organizer = organizer;
-        this.date = date;
-    }
-
-
-
     @Override
     public String toString() {
         return "ConcertInHall{" +
                 "id=" + id +
                 ", concertHall=" + concertHall +
+                ", concertHallId=" + concertHallId +
                 ", name='" + name + '\'' +
                 ", organizer=" + organizer +
+                ", organizerId=" + organizerId +
                 ", date=" + date +
                 '}';
     }
@@ -62,11 +63,11 @@ public class ConcertInHall {
         this.organizer = organizer;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

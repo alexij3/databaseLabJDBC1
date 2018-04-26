@@ -82,7 +82,7 @@ public class OrganizerDAOImpl implements OrganizerDAO {
     }
 
     @Override
-    public List<Organizer> getAll() throws SQLException {
+    public synchronized List<Organizer> getAll() throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
         List<Organizer> list = new ArrayList<>();

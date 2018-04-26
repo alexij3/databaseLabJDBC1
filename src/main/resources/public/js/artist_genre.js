@@ -2,6 +2,7 @@ var app = angular.module("demo", []);
 
 app.controller("ArtistGenreCtrl", function($scope, $http) {
     var artistId;
+    var oldGenre;
     var genres = [];
 
     $scope.artists = [];
@@ -24,7 +25,6 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
                 method: 'PUT',
                 url: '/api/artistgenre/insertgenre?id=' + artistId,
                 data: {
-                    artist : null,
                     genre : genres[i]
                 }
             };
@@ -35,10 +35,11 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
         }
     };
 
-    this.startUpdateGenres = function startUpdateGenres(id, name){
+    this.startUpdateGenres = function startUpdateGenres(id, name, genre){
         artistId = id;
+        oldGenre = genre;
         document.getElementById('updLabelArtist').innerHTML = name;
-        document.getElementById('selectedGenre').value = "Комедія";
+        document.getElementById('selectedGenre').value = genre;
 
     };
 
@@ -46,9 +47,9 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
         var genre = document.getElementById('selectGenre').value;
         var request = {
             method: 'PUT',
-            url: '/api/artistgenre/updategenre?id=' + artistId,
+            url: '/api/artistgenre/updategenre?oldGenre=' + oldGenre,
             data: {
-                artist : null,
+                artistId : artistId,
                 genre : genre
             }
         };

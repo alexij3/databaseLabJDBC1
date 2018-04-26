@@ -210,7 +210,7 @@ public class DataStorageFake {
     );
 
     public List<ContestInPalace> contestsInPalaces = new ArrayList<>(
-            Arrays.asList(
+           /* Arrays.asList(
                     new ContestInPalace(1, culturePalaces.get(0), "Конкурс-виставка \"Натюрморт\"", organizers.get(0), new Date(2018-01-20)),
                     new ContestInPalace(2, culturePalaces.get(0), "Конкурс-виставка \"Різьблення\"", organizers.get(1), new Date(2018-01-25)),
                     new ContestInPalace(3, culturePalaces.get(0), "Конкурс \"Портрет\"", organizers.get(2), new Date(2018-02-01)),
@@ -218,7 +218,7 @@ public class DataStorageFake {
                     new ContestInPalace(5, culturePalaces.get(4), "Конкурс \"Диво-історія\"", organizers.get(4), new Date(2018-02-10)),
                     new ContestInPalace(6, culturePalaces.get(5), "Конкурс \"Інший\"", organizers.get(5), new Date(2018-01-14)),
                     new ContestInPalace(7, culturePalaces.get(6), "Конкурс \"Багатий\"", organizers.get(6), new Date(2018-03-02))
-            )
+            )*/
     );
 
     /*public List<ContestResults> contestResults = new ArrayList<>(

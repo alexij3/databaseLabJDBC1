@@ -30,13 +30,12 @@ public class ConcertInHallDAOImpl implements ConcertInHallDAO {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
 
         PreparedStatement insert;
-        String insertMovie = "INSERT INTO concert_in_hall (id, id_concert_hall, name, id_organizer, date) VALUES (?, ?, ?, ?, ?)";
-        insert = con.prepareStatement(insertMovie);
-        insert.setInt(1, concertInHall.getId());
-        insert.setInt(2, concertInHall.getConcertHall().getId());
-        insert.setString(3, concertInHall.getName());
-        insert.setInt(4, concertInHall.getOrganizer().getId());
-        insert.setDate(5, java.sql.Date.valueOf(concertInHall.getDate()));
+        String insertConcertInHall = "INSERT INTO concert_in_hall (id_concert_hall, name, id_organizer, date) VALUES (?, ?, ?, ?)";
+        insert = con.prepareStatement(insertConcertInHall);
+        insert.setInt(1, concertInHall.getConcertHall().getId());
+        insert.setString(2, concertInHall.getName());
+        insert.setInt(3, concertInHall.getOrganizer().getId());
+        insert.setDate(4, java.sql.Date.valueOf(concertInHall.getDate()));
         insert.executeUpdate();
 
         con.close();
@@ -70,8 +69,8 @@ public class ConcertInHallDAOImpl implements ConcertInHallDAO {
     public void delete(int id)  throws SQLException{
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         PreparedStatement delete;
-        String deleteMovie = "DELETE FROM cinema_movie WHERE id_movie = ?";
-        delete = con.prepareStatement(deleteMovie);
+        String deleteConcertInHall = "DELETE FROM concert_in_hall WHERE id = ?";
+        delete = con.prepareStatement(deleteConcertInHall);
         delete.setInt(1, id);
         delete.executeUpdate();
         con.close();
@@ -86,7 +85,8 @@ public class ConcertInHallDAOImpl implements ConcertInHallDAO {
         ResultSet rs = this.executeQuery("SELECT concert_in_hall.id, concert_in_hall.name, id_concert_hall, concert_hall.name, concert_hall.address, concert_hall.capacity, concert_in_hall.name " +
                 ", id_organizer, organizer.name, date FROM concert_in_hall" +
                 "\nJOIN concert_hall ON concert_hall.id = id_concert_hall" +
-                "\nJOIN organizer ON id_organizer = organizer.id");
+                "\nJOIN organizer ON id_organizer = organizer.id" +
+                "\nORDER BY concert_in_hall.id");
 
         while (rs.next()){
             list.add(new ConcertInHall(rs.getInt("id"), new ConcertHall(rs.getInt("id_concert_hall"),

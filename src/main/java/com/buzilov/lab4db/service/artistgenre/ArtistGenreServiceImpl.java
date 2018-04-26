@@ -20,8 +20,8 @@ public class ArtistGenreServiceImpl implements ArtistGenreService {
     }
 
     @Override
-    public ArtistGenre update(ArtistGenre artistGenre) throws SQLException {
-        return artistGenreDAO.update(artistGenre);
+    public ArtistGenre update(String oldGenre, ArtistGenre artistGenre) throws SQLException {
+        return artistGenreDAO.update(oldGenre, artistGenre);
     }
 
     @Override

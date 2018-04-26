@@ -8,7 +8,7 @@ import java.util.List;
 public interface ContestResultsDAO {
     ContestResults insert(ContestResults contest) throws SQLException;
     ContestResults get(int id);
-    ContestResults update(ContestResults contest);
-    void delete(int id);
+    ContestResults update(int oldContestId, int oldArtistId, ContestResults contest) throws SQLException;
+    void delete(int contestId, int artistId) throws SQLException;
     List<ContestResults> getAll() throws SQLException;
 }

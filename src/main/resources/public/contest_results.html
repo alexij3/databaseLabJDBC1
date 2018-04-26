@@ -37,8 +37,8 @@
                 <td>{{item.place}}</td>
                 <td>{{item.isWinner == 'y' ? 'Так' : 'Ні'}}</td>
                 <td>
-                    <button id="update" ng-click="contestInPalaceCtrl.startUpdateContestInPalace(item.id, item.name, item.culturePalace.id, item.organizer.id, item.date)" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
-                    <button id="delete" ng-click="contestInPalaceCtrl.deleteContestInPalace(item.id)" class="btn-danger">Видалити</button>
+                    <button id="update" ng-click="contestResultsCtrl.startUpdate(item.contest.id, item.artist.id, item.place, item.isWinner)" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
+                    <button id="delete" ng-click="contestResultsCtrl.del(item.contest.id, item.artist.id)" class="btn-danger">Видалити</button>
                 </td>
             </tr>
             </tbody>
@@ -85,18 +85,18 @@
                     <h4 class="modal-title">Редагування</h4>
                 </div>
                 <div class="modal-body">
-                    <label>Назва: </label>
-                    <input type="text" id="updateContestInPalaceName" name="updateContestInPalaceName" /> <br>
-                    <label>Концертна площадка: </label> <br>
-                    <select id="updateContestInPalaceCulturePalace" name="updateContestInPalaceCulturePalace" >
-
-                    </select> <br>
-                    <label>Організатор: </label> <br>
-                    <select id="updateContestInPalaceOrganizer" name="updateContestInPalaceOrganizer" ></select> <br>
-                    <label>Дата: </label>
-                    <input type="date" name ="updateDate" id="updateDatePicker"/> <br>
-                    <select id="updateContestResultArtist"></select>
-                    <button id="updateContestInPalaceButton" ng-click="contestInPalaceCtrl.updateContestInPalace()">Змінити</button>
+                    <label>Конкурс: </label> <br>
+                    <select id="updateContestResultContest"></select> <br>
+                    <label>Артист: </label> <br>
+                    <select id="updateContestResultArtist"></select> <br>
+                    <label>Місце: </label>
+                    <input type="number" width="20px" min="1" id="updatePlace"/><br>
+                    <label>Переможець: </label>
+                    <select id="updateIsWinner">
+                        <option value="y">Так</option>
+                        <option value="n">Ні</option>
+                    </select>
+                    <button id="updatecontestResultsButton" ng-click="contestResultsCtrl.update()">Змінити</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>

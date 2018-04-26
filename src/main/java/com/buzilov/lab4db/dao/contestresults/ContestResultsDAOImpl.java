@@ -51,13 +51,35 @@ public class ContestResultsDAOImpl implements ContestResultsDAO {
     }
 
     @Override
-    public ContestResults update(ContestResults contestResult) {
-        return null;
+    public ContestResults update(int oldContestId, int oldArtistId, ContestResults contestResult) throws SQLException {
+        con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+        PreparedStatement update;
+        String updatecontestResult = "UPDATE contest_results SET id_contest = ?, id_artist = ?, place = ?, is_winner = ? " +
+                                     " WHERE id_contest = ? AND id_artist = ?";
+        System.out.println(contestResult);
+        update = con.prepareStatement(updatecontestResult);
+        update.setInt(1, contestResult.getContestId());
+        update.setInt(2, contestResult.getArtistId());
+        update.setInt(3, contestResult.getPlace());
+        update.setString(4, String.valueOf(contestResult.getIsWinner()));
+        update.setInt(5, oldContestId);
+        update.setInt(6, oldArtistId);
+        update.executeUpdate();
+
+        con.close();
+        return contestResult;
     }
 
     @Override
-    public void delete(int id) {
-
+    public void delete(int contestId, int artistId) throws SQLException {
+        con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
+        PreparedStatement delete;
+        String deleteContestResult = "DELETE FROM contest_results WHERE id_contest = ? AND id_artist = ?";
+        delete = con.prepareStatement(deleteContestResult);
+        delete.setInt(1, contestId);
+        delete.setInt(2, artistId);
+        delete.executeUpdate();
+        con.close();
     }
 
     @Override

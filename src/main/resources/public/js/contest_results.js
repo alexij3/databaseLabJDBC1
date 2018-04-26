@@ -1,6 +1,9 @@
 var app = angular.module("demo", []);
 
 app.controller("ContestResultsCtrl", function($scope, $http){
+    var oldContestId;
+    var oldArtistId;
+
     $scope.contestResults = [];
     $http.get('/api/contestresults/showall').then(function(response){
         $scope.contestResults = response.data;
@@ -81,7 +84,47 @@ app.controller("ContestResultsCtrl", function($scope, $http){
         $http(request).then(function(response){
             console.log(response);
             window.location.reload();
-        })
+        });
+    };
+
+    this.startUpdate = function startUpdate(contestId, artistId, place, isWinner){
+        oldContestId = contestId;
+        oldArtistId = artistId;
+
+        document.getElementById('updateContestResultContest').value = contestId;
+        document.getElementById('updateContestResultArtist').value = artistId;
+        document.getElementById('updatePlace').value = place;
+        document.getElementById('updateIsWinner').value = isWinner;
+    };
+
+    this.update = function update(){
+        var contestId = document.getElementById('updateContestResultContest').value;
+        var artistId = document.getElementById('updateContestResultArtist').value;
+        var place = document.getElementById('updatePlace').value;
+        var isWinner = document.getElementById('updateIsWinner').value;
+
+        var request = {
+            method: 'POST',
+            url: '/api/contestresults/update?oldContestId=' + oldContestId + '&oldArtistId=' + oldArtistId,
+            data: {
+                contestId : contestId,
+                artistId : artistId,
+                place : place,
+                isWinner : isWinner
+            }
+        };
+
+        $http(request).then(function(response){
+            console.log(response);
+            window.location.reload();
+        });
+    };
+
+    this.del = function del(contestId, artistId){
+        $http.post('/api/contestresults/delete?contestId=' + contestId + '&artistId=' + artistId).then(function(response){
+            console.log(response);
+            window.location.reload();
+        });
     }
 });
 

@@ -24,13 +24,13 @@ public class ContestResultsServiceImpl implements ContestResultsService {
     }
 
     @Override
-    public ContestResults update(ContestResults contest) throws SQLException {
-        return contestResultsDAO.update(contest);
+    public ContestResults update(int oldContestId, int oldArtistId,ContestResults contest) throws SQLException {
+        return contestResultsDAO.update(oldContestId, oldArtistId, contest);
     }
 
     @Override
-    public void delete(int id) throws SQLException {
-        contestResultsDAO.delete(id);
+    public void delete(int contestId, int artistId) throws SQLException {
+        contestResultsDAO.delete(contestId, artistId);
     }
 
     @Override

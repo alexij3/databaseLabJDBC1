@@ -5,6 +5,7 @@ import com.buzilov.lab4db.service.contestresults.ContestResultsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
@@ -24,6 +25,18 @@ public class ContestResultsController {
     @RequestMapping("/insert")
     public ContestResults insert(@RequestBody ContestResults contestResults) throws SQLException {
         return contestResultsService.insert(contestResults);
+    }
+
+    @RequestMapping("/update")
+    public ContestResults update(@RequestParam("oldContestId") int oldContestId,
+                                 @RequestParam("oldArtistId") int oldArtistId,
+                                 @RequestBody ContestResults contestResults) throws SQLException {
+        return contestResultsService.update(oldContestId, oldArtistId, contestResults);
+    }
+
+    @RequestMapping("/delete")
+    public void delete(@RequestParam("contestId") int contestId, @RequestParam("artistId") int artistId) throws SQLException {
+        contestResultsService.delete(contestId, artistId);
     }
 
 }

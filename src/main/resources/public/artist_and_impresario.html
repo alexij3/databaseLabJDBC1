@@ -21,7 +21,7 @@
                 <th>ІД</th>
                 <th>Артист</th>
                 <th>Імпресаріо</th>
-                <th width="230px"></th>
+                <th width="230px"><button type="create" class="btn-success" data-toggle="modal" data-target="#addModal">Додати</button></th>
             </tr>
             </thead>
 
@@ -32,9 +32,8 @@
                 <td>{{item.artist.name}}</td>
                 <td>{{item.impresario.name}}</td>
                 <td>
-                    <button type="create" class="btn-success" data-toggle="modal" data-target="#addModal" ng-click="artistImpresarioCtrl.startAddImpresario(item.artist.id, item.artist.name)">Створити</button>
-                    <button id="update" ng-click="" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
-                    <button id="delete" ng-click="" class="btn-danger">Видалити</button>
+                    <button id="update" ng-click="artistImpresarioCtrl.startUpdateArtistImpresarios(item.artist.id, item.artist.name, item.impresario.id)" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
+                    <button id="delete" ng-click="artistImpresarioCtrl.deleteArtistImpresario(item.artist.id, item.impresario.id)" class="btn-danger">Видалити</button>
                 </td>
             </tr>
             </tbody>
@@ -50,7 +49,9 @@
                 </div>
                 <div class="modal-body">
                     <label>Артист: </label>
-                    <span id="artistLabelName"></span> <br>
+                    <select id="selectArtist">
+
+                    </select><br>
                     <label>Імпресаріо: </label> <br>
                     <select multiple ng-model="selectedImpresarios" id="selectImpresarios" name="selectImpresarios" title="Імпресаріо">
 
@@ -74,9 +75,15 @@
                     <h4 class="modal-title">Редагування</h4>
                 </div>
                 <div class="modal-body">
+                    <label>Артист: </label>
+                    <span id="labelArtist"></span> <br>
+                    <label>Імпресаріо: </label> <br>
+                    <select id="updSelectImpresarios" name="updSelectImpresarios" title="Імпресаріо">
 
+                    </select>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="artistImpresarioCtrl.updateArtistImpresario()">Змінити</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Закрити</button>
                 </div>
             </div>

@@ -31,16 +31,12 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
     @Override
     public ArtistGenre update(String oldGenre, ArtistGenre artistGenre) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
-        Artist artist = artistDAO.getArtist(artistGenre.getArtistId());
-        artistGenre.setArtist(artist);
 
-        System.out.println(artistGenre.getArtist().getId());
-        System.out.println(artistGenre.getGenre().toString());
         PreparedStatement update;
         String updateArtistGenre = "UPDATE artist_and_genre SET genre = ? WHERE id_artist = ? AND genre = ?";
         update = con.prepareStatement(updateArtistGenre);
         update.setString(1, artistGenre.getGenre().toString());
-        update.setInt(2, artistGenre.getArtist().getId());
+        update.setInt(2, artistGenre.getArtistId());
         update.setString(3, oldGenre);
         System.out.println(update.executeUpdate());
 
@@ -63,15 +59,14 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
     }
 
     @Override
-    public ArtistGenre insert(ArtistGenre artistGenre) throws SQLException {
+    public synchronized ArtistGenre insert(ArtistGenre artistGenre) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
-        Artist artist = artistDAO.getArtist(artistGenre.getArtistId());
-        artistGenre.setArtist(artist);
+        System.out.println(artistGenre.getArtistId());
 
         PreparedStatement insert;
         String insertArtistGenre = "INSERT INTO artist_and_genre (id_artist, genre) VALUES (?, ?)";
         insert = con.prepareStatement(insertArtistGenre);
-        insert.setInt(1, artistGenre.getArtist().getId());
+        insert.setInt(1, artistGenre.getArtistId());
         insert.setString(2, artistGenre.getGenre().toString());
         insert.executeUpdate();
 
@@ -80,7 +75,7 @@ public class ArtistGenreDAOImpl implements ArtistGenreDAO {
     }
 
     @Override
-    public List<ArtistGenre> getAll() throws SQLException {
+    public synchronized List<ArtistGenre> getAll() throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
 

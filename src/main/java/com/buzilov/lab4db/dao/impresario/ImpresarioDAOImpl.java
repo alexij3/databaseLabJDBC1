@@ -82,7 +82,7 @@ public class ImpresarioDAOImpl implements ImpresarioDAO{
     }
 
     @Override
-    public List<Impresario> getAll() throws SQLException {
+    public synchronized List<Impresario> getAll() throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
         List<Impresario> list = new ArrayList<>();

@@ -21,7 +21,9 @@
                     <th>ІД</th>
                     <th>Артист</th>
                     <th>Жанр</th>
-                    <th width="200px"></th>
+                    <th width="200px">
+                        <button type="create" class="btn-success" data-toggle="modal" data-target="#addModal">Додати</button>
+                    </th>
                 </tr>
             </thead>
 
@@ -32,9 +34,8 @@
                 <td>{{item.artist.name}}</td>
                 <td>{{item.genre.toString()}}</td>
                 <td>
-                    <button type="create" class="btn-success" data-toggle="modal" data-target="#addModal" ng-click="artistGenreCtrl.startAddGenre(item.artist.id, item.artist.name)">Створити</button>
-                    <button id="update" ng-click="artistGenreCtrl.startUpdateGenres(item.artist.id, item.artist.name, item.genre.toString())" class="btn-warning" data-toggle="modal" data-target="#editModal">Edit</button>
-                    <button id="delete" ng-click="artistGenreCtrl.deleteGenre(item.artist.id, item.genre.toString())" class="btn-danger">Del</button>
+                    <button id="update" ng-click="artistGenreCtrl.startUpdateGenres(item.artist.id, item.artist.name, item.genre.toString())" class="btn-warning" data-toggle="modal" data-target="#editModal">Редагувати</button>
+                    <button id="delete" ng-click="artistGenreCtrl.deleteGenre(item.artist.id, item.genre.toString())" class="btn-danger">Видалити</button>
                 </td>
             </tr>
             </tbody>
@@ -50,7 +51,8 @@
                 </div>
                 <div class="modal-body">
                     <label>Артист: </label>
-                    <span id="labelArtist"></span> <br>
+                    <select id="selectedArtist">
+                    </select><br>
                     <label>Жанри:</label>
                     <select multiple ng-model="selectedGenres" id="selectGenres" name="selectGenres" title="Жанри">
                         <option>Комедія</option>

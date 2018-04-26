@@ -29,10 +29,20 @@ public class ArtistAndImpresarioController {
     }
 
     @RequestMapping("/insert")
-    public ArtistAndImpresario insertGenre(@RequestParam("id") int id, @RequestBody ArtistAndImpresario artistAndImpresario) throws SQLException{
-        Artist artist = artistService.getArtist(id);
-        artistAndImpresario.setArtist(artist);
+    public ArtistAndImpresario insert(@RequestBody ArtistAndImpresario artistAndImpresario) throws SQLException{
         System.out.println(artistAndImpresario);
         return artistAndImpresarioService.insert(artistAndImpresario);
+    }
+
+    @RequestMapping("/update")
+    public ArtistAndImpresario update(@RequestParam("oldImpresarioId") int oldImpresarioId, @RequestBody ArtistAndImpresario artistAndImpresario) throws SQLException {
+        System.out.println(oldImpresarioId);
+        System.out.println(artistAndImpresario.getImpresarioId());
+        return artistAndImpresarioService.update(oldImpresarioId, artistAndImpresario);
+    }
+
+    @RequestMapping("/delete")
+    public void delete(@RequestBody ArtistAndImpresario artistAndImpresario) throws SQLException {
+        artistAndImpresarioService.delete(artistAndImpresario.getArtistId(), artistAndImpresario.getImpresarioId());
     }
 }

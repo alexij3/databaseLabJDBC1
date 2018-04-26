@@ -10,15 +10,20 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
         $scope.artists = response.data;
     });
 
+    $http.get('/api/artist/showall').then(function(response){
+        var artists = response.data;
+        var select = document.getElementById('selectedArtist');
+        for (var i = 0; i < artists.length; i++){
+            var option = document.createElement("option");
+            option.text = artists[i].name;
+            option.value = artists[i].id;
 
-    this.startAddGenre = function startAddGenre(id, name) {
-        artistId = id;
-        document.getElementById('labelArtist').innerHTML = name;
-
-
-    };
+            select.add(option);
+        }
+    });
 
     this.addGenre = function addGenre(){
+        artistId = document.getElementById('selectedArtist').value;
         genres = $scope.selectedGenres;
         for (var i = 0; i < genres.length; i++){
             var request = {

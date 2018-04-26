@@ -24,8 +24,8 @@ public class ArtistAndImpresarioServiceImpl implements ArtistAndImpresarioServic
     }
 
     @Override
-    public ArtistAndImpresario update(ArtistAndImpresario artistAndImpresario) throws SQLException {
-        return artistAndImpresarioDAO.update(artistAndImpresario);
+    public ArtistAndImpresario update(int oldImpresarioId, ArtistAndImpresario artistAndImpresario) throws SQLException {
+        return artistAndImpresarioDAO.update(oldImpresarioId, artistAndImpresario);
     }
 
     @Override

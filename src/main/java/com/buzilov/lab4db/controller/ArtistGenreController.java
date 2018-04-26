@@ -27,7 +27,7 @@ public class ArtistGenreController {
 
     @RequestMapping("/insertgenre")
     public ArtistGenre insertGenre(@RequestParam("id") int id, @RequestBody ArtistGenre artistGenre) throws SQLException{
-        System.out.println(artistGenre);
+        artistGenre.setArtistId(id);
         return artistGenreService.insert(artistGenre);
     }
 

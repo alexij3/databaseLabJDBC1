@@ -1,5 +1,7 @@
 package com.buzilov.lab4db.dao.artistandimpresario;
 
+import com.buzilov.lab4db.dao.artist.ArtistDAOImpl;
+import com.buzilov.lab4db.dao.impresario.ImpresarioDAOImpl;
 import com.buzilov.lab4db.datastorage.DataStorageFake;
 import com.buzilov.lab4db.datastorage.DataStorageJdbc;
 import com.buzilov.lab4db.model.Artist;
@@ -16,10 +18,13 @@ import java.util.List;
 @Component
 public class ArtistAndImpresarioDAOImpl implements ArtistAndImpresarioDAO{
     @Autowired
-    DataStorageFake dataStorage;
+    DataStorageJdbc dataStorageJdbc;
 
     @Autowired
-    DataStorageJdbc dataStorageJdbc;
+    ArtistDAOImpl artistDAO;
+
+    @Autowired
+    ImpresarioDAOImpl impresarioDAO;
 
     Connection con;
     Statement statement;
@@ -31,8 +36,8 @@ public class ArtistAndImpresarioDAOImpl implements ArtistAndImpresarioDAO{
         PreparedStatement insert;
         String insertArtistAndImpresario = "INSERT INTO artist_and_impresario (id_artist, id_impresario) VALUES (?, ?)";
         insert = con.prepareStatement(insertArtistAndImpresario);
-        insert.setInt(1, artistAndImpresario.getArtist().getId());
-        insert.setInt(2, artistAndImpresario.getImpresario().getId());
+        insert.setInt(1, artistAndImpresario.getArtistId());
+        insert.setInt(2, artistAndImpresario.getImpresarioId());
         insert.executeUpdate();
 
         con.close();
@@ -45,16 +50,15 @@ public class ArtistAndImpresarioDAOImpl implements ArtistAndImpresarioDAO{
     }
 
     @Override
-    public ArtistAndImpresario update(ArtistAndImpresario artistAndImpresario) throws SQLException {
+    public synchronized ArtistAndImpresario update(int oldImpresarioId, ArtistAndImpresario artistAndImpresario) throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
 
-        System.out.println(artistAndImpresario.getArtist().getId());
-        System.out.println(artistAndImpresario.getImpresario().toString());
         PreparedStatement update;
-        String updateArtistAndImpresario = "UPDATE artist_and_impresario SET id_impresario = ? WHERE id_artist = ?";
+        String updateArtistAndImpresario = "UPDATE artist_and_impresario SET id_impresario = ? WHERE id_artist = ? AND id_impresario = ?";
         update = con.prepareStatement(updateArtistAndImpresario);
-        update.setInt(1, artistAndImpresario.getImpresario().getId());
-        update.setInt(2, artistAndImpresario.getArtist().getId());
+        update.setInt(1, artistAndImpresario.getImpresarioId());
+        update.setInt(2, artistAndImpresario.getArtistId());
+        update.setInt(3, oldImpresarioId);
         System.out.println(update.executeUpdate());
 
         con.close();
@@ -76,18 +80,23 @@ public class ArtistAndImpresarioDAOImpl implements ArtistAndImpresarioDAO{
     }
 
     @Override
-    public List<ArtistAndImpresario> getAll() throws SQLException {
+    public synchronized List<ArtistAndImpresario> getAll() throws SQLException {
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
 
         List<ArtistAndImpresario> list = new ArrayList<>();
-        ResultSet rs = dataStorageJdbc.executeQuery("SELECT artist.id, artist.name, impresario.id, impresario.name" +
-                                                    " FROM artist LEFT JOIN artist_and_impresario ON artist.id = artist_and_impresario.id_artist" +
-                                                    " LEFT JOIN impresario ON artist_and_impresario.id_impresario = impresario.id");
+        ResultSet rs = dataStorageJdbc.executeQuery("SELECT id_artist, id_impresario FROM artist_and_impresario");
 
         while (rs.next()){
-            list.add(new ArtistAndImpresario(new Artist(rs.getInt("artist.id"), rs.getString("artist.name")),
-                     new Impresario(rs.getInt("impresario.id"), rs.getString("impresario.name"))));
+            list.add(new ArtistAndImpresario(rs.getInt("id_artist"), rs.getInt("id_impresario")));
+        }
+
+        List <Artist> artists = artistDAO.getAll();
+        List <Impresario> impresarios = impresarioDAO.getAll();
+
+        for (ArtistAndImpresario a : list){
+            a.setArtist(artists.stream().filter(el->el.getId() == a.getArtistId()).findFirst().orElse(null));
+            a.setImpresario(impresarios.stream().filter(el->el.getId() == a.getImpresarioId()).findFirst().orElse(null));
         }
 
         statement.close();

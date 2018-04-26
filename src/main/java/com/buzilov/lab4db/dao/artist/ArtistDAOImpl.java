@@ -80,7 +80,7 @@ public class ArtistDAOImpl implements ArtistDAO{
     }
 
     @Override
-    public List<Artist> getAll() throws SQLException{
+    public synchronized List<Artist> getAll() throws SQLException{
         con = DriverManager.getConnection(dataStorageJdbc.getUrl(), dataStorageJdbc.getLogin(), dataStorageJdbc.getPassword());
         statement = con.createStatement();
         List<Artist> list = new ArrayList<>();

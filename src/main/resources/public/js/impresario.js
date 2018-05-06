@@ -4,14 +4,20 @@ app.controller("ImpresarioCtrl", function($scope, $http){
 
     var idToUpdate;
 
+    var time = performance.now();
     $scope.impresarios = [];
      $http.get('/api/impresario/showAll').then(function (response){
+         time = performance.now() - time;
+         window.alert("Виведення відбулося за " + time + " мс.");
         $scope.impresarios=response.data;
         console.log(response);
     });
 
     this.deleteImpresario = function deleteImpresario(id){
+        var time = performance.now();
         $http.get('/api/impresario/delete?id=' + id).then(function(){
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             window.location.reload();
             console.log("deleted impresario with id " + id);
         });
@@ -19,7 +25,10 @@ app.controller("ImpresarioCtrl", function($scope, $http){
 
     this.createImpresario = function createImpresario(){
         var name = document.getElementById('ImpresarioName').value;
+        var time = performance.now();
         $http.put('/api/impresario/create?name=' + name).then(function(){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс.");
             window.location.reload();
         });
     };
@@ -39,10 +48,13 @@ app.controller("ImpresarioCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function (response){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             window.location.reload();
             console.log(response);
-        })
+        });
     }
 });
 

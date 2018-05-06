@@ -5,8 +5,11 @@ app.controller("ArtistImpresarioCtrl", function($scope, $http) {
     var oldImpresarioId;
     var impresariosToAdd = [];
 
+    var time = performance.now();
     $scope.artists = [];
     $http.get('/api/artistimpresario/showall').then(function(response){
+        time = performance.now() - performance.now();
+        window.alert("Виведення відбулося за " + time + " мс.");
        $scope.artists = response.data;
 
         $http.get('/api/artist/showall').then(function(response){

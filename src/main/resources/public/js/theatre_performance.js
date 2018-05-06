@@ -56,14 +56,20 @@ app.controller("TheatrePerformanceCtrl", function($scope, $http){
 
     });
 
+    var time = performance.now();
     $scope.theatrePerformances = [];
      $http.get('/api/theatreperformance/showall').then(function (response){
+         time = performance.now() - time;
+         window.alert("Виведення відбулося за " + time + " мс.");
         $scope.theatrePerformances=response.data;
         console.log(response);
     });
 
     this.deleteTheatrePerformance = function deleteTheatrePerformance(id){
+        time = performance.now();
         $http.post('/api/theatreperformance/delete?id=' + id).then(function(response){
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             window.location.reload();
             console.log(response);
         });
@@ -94,9 +100,12 @@ app.controller("TheatrePerformanceCtrl", function($scope, $http){
             }
         };
 
+        time = performance.now();
         $http(request).then(function(response){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс.");
             window.location.reload();
-        })
+        });
 
         //window.alert(date);
     };
@@ -128,7 +137,10 @@ app.controller("TheatrePerformanceCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function (response){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             window.location.reload();
             console.log(response);
         });

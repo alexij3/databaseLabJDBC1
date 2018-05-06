@@ -56,14 +56,20 @@ app.controller("ConcertInHallCtrl", function($scope, $http){
 
     });
 
+    var time = performance.now();
     $scope.contestInPalaces = [];
     $http.get('/api/concertinhall/showall').then(function (response){
+        time = performance.now();
+        window.alert("Виведення відбулося за " + time + " мс.");
         $scope.contestInPalaces=response.data;
         console.log(response);
     });
 
     this.deleteConcertInHall = function deleteConcertInHall(id){
+        var time = performance.now();
         $http.post('/api/concertinhall/delete?id=' + id).then(function(response){
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             window.location.reload();
             console.log(response);
         });
@@ -94,7 +100,10 @@ app.controller("ConcertInHallCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function(response){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс.");
             window.location.reload();
         })
 
@@ -128,7 +137,10 @@ app.controller("ConcertInHallCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function (response){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             window.location.reload();
             console.log(response);
         });

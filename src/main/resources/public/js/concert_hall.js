@@ -4,16 +4,22 @@ app.controller("ConcertHallCtrl", function($scope, $http){
 
     var idToUpdate;
 
+    var time = performance.now();
     $scope.concertHalls = [];
      $http.get('/api/concerthall/showAll').then(function (response){
+         time = performance.now() - time;
+         window.alert("Виведення відбулося за " + time + " мс.");
         $scope.concertHalls=response.data;
         console.log(response);
     });
 
     this.deleteConcertHall = function deleteConcertHall(id){
+        var time = performance.now();
         $http.get('/api/concerthall/delete?id=' + id).then(function(){
-            window.location.reload();
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             console.log("deleted concertHall with id " + id);
+            window.location.reload();
         });
     };
 
@@ -23,7 +29,7 @@ app.controller("ConcertHallCtrl", function($scope, $http){
         var capacity = document.getElementById('ConcertHallCapacity').value;
 
         var createRequest ={
-            method: 'POST',
+            method: 'PUT',
             url: '/api/concerthall/create',
             data: {
                 name : name,
@@ -32,10 +38,11 @@ app.controller("ConcertHallCtrl", function($scope, $http){
             }
         };
 
-        $http(createRequest).success(
-            console.log('created concertHall with name ' + name)
-        ).then(function(){
-            window.parent.location.reload();
+        var time = performance.now();
+        $http(createRequest).then(function(){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс.");
+            window.location.reload();
         });
     };
 
@@ -62,7 +69,10 @@ app.controller("ConcertHallCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function (response){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             console.log(response);
             window.location.reload();
         });

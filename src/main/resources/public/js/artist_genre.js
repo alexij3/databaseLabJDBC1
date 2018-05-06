@@ -5,8 +5,11 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
     var oldGenre;
     var genres = [];
 
+    //var time = performance.now();
     $scope.artists = [];
     $http.get('/api/artistgenre/showgenres').then(function (response) {
+      //  time = performance.now() - time;
+       // window.alert("Виведення відбулося за " + time + " мс.");
         $scope.artists = response.data;
     });
 
@@ -23,6 +26,8 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
     });
 
     this.addGenre = function addGenre(){
+        var time;
+        var time2;
         artistId = document.getElementById('selectedArtist').value;
         genres = $scope.selectedGenres;
         for (var i = 0; i < genres.length; i++){
@@ -34,7 +39,10 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
                 }
             };
 
-            $http(request).then(function(){
+            time = performance.now();
+            $http(request).then(function(response){
+                time2 = performance.now() - time;
+                window.alert("Створення відбулося за " + time2 + " мс.");
                 window.location.reload();
             });
         }
@@ -49,6 +57,7 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
     };
 
     this.updateGenre = function updateGenre(){
+        var time = performance.now();
         var genre = document.getElementById('selectGenre').value;
         var request = {
             method: 'PUT',
@@ -60,11 +69,14 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
         };
 
         $http(request).then(function(){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             window.location.reload();
         });
     };
 
     this.deleteGenre = function deleteGenre(artistId, genreName){
+        var time = performance.now();
         var request = {
             method: 'POST',
             url: '/api/artistgenre/deletegenre?id=' + artistId,
@@ -75,6 +87,8 @@ app.controller("ArtistGenreCtrl", function($scope, $http) {
         };
 
         $http(request).then(function(response){
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             window.location.reload();
         });
     }

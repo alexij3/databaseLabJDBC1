@@ -4,14 +4,20 @@ app.controller("TheatreCtrl", function($scope, $http){
 
     var idToUpdate;
 
+    var time = performance.now();
     $scope.theatres = [];
      $http.get('/api/theatre/showAll').then(function (response){
+         time = performance.now() - time;
+         window.alert("Виведення відбулося за " + time + " мс.");
         $scope.theatres=response.data;
         console.log(response);
     });
 
     this.deleteTheatre = function deleteTheatre(id){
+        var time = performance.now();
         $http.get('/api/theatre/delete?id=' + id).then(function(){
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             window.location.reload();
             console.log("deleted theatre with id " + id);
         });
@@ -23,7 +29,7 @@ app.controller("TheatreCtrl", function($scope, $http){
         var capacity = document.getElementById('TheatreCapacity').value;
 
         var createRequest ={
-            method: 'POST',
+            method: 'PUT',
             url: '/api/theatre/create',
             data: {
                 name : name,
@@ -32,7 +38,10 @@ app.controller("TheatreCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(createRequest).then(function(){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс."):
             window.location.reload();
         });
     };
@@ -60,10 +69,13 @@ app.controller("TheatreCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function (response){
+            time = performance.now() - time;
+            window.alert("Оновленння відбулося за " + time + " мс.");
             window.location.reload();
             console.log(response);
-        })
+        });
     }
 });
 

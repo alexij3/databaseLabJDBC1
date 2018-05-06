@@ -4,8 +4,11 @@ app.controller("ContestResultsCtrl", function($scope, $http){
     var oldContestId;
     var oldArtistId;
 
+    var time = performance.now();
     $scope.contestResults = [];
     $http.get('/api/contestresults/showall').then(function(response){
+        time = performance.now() - time;
+        window.alert("Виведення відбулося за " + time + " мс.");
         $scope.contestResults = response.data;
 
         $http.get('/api/contestinpalace/showall').then(function(response){
@@ -81,7 +84,10 @@ app.controller("ContestResultsCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function(response){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс.");
             console.log(response);
             window.location.reload();
         });
@@ -114,14 +120,20 @@ app.controller("ContestResultsCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(request).then(function(response){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             console.log(response);
             window.location.reload();
         });
     };
 
     this.del = function del(contestId, artistId){
+        var time = performance.now();
         $http.post('/api/contestresults/delete?contestId=' + contestId + '&artistId=' + artistId).then(function(response){
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             console.log(response);
             window.location.reload();
         });

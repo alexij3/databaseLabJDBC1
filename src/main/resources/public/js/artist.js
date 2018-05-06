@@ -5,14 +5,20 @@ app.controller("ArtistCtrl", function($scope, $http){
     var genres = [];
 
     $scope.artists = [];
+    var time = performance.now();
      $http.get('/api/artist/showall').then(function (response){
         $scope.artists=response.data;
+        time = performance.now() - time;
+        window.alert("Виведення відбулося за " + time + " мс.");
         console.log(response);
     });
 
     this.deleteArtist = function deleteArtist(id){
+        var time = performance.now();
         $http.get('/api/artist/delete?id=' + id).then(function(){
             window.alert("Видалено артиста з ІД " + id);
+            time = performance.now() - time;
+            window.alert("Видалення відбулося за " + time + " мс.");
             window.location.reload();
         });
     };
@@ -31,12 +37,14 @@ app.controller("ArtistCtrl", function($scope, $http){
             }
         };
 
+        var time = performance.now();
         $http(createRequest).then(function(response){
+            time = performance.now() - time;
+            window.alert("Створення відбулося за " + time + " мс.");
+            genres = [];
+            window.location.reload();
             console.log(response);
         });
-
-        genres = [];
-        window.location.reload();
     };
 
     this.startUpdateArtist = function startUpdateArtist(id, name){
@@ -45,6 +53,7 @@ app.controller("ArtistCtrl", function($scope, $http){
     };
 
     this.updateArtist = function updateArtist(){
+        var time = performance.now();
         var name = document.getElementById('updateArtistName').value;
         var request = {
             method: 'POST',
@@ -55,10 +64,11 @@ app.controller("ArtistCtrl", function($scope, $http){
         };
 
         $http(request).then(function (response){
+            time = performance.now() - time;
+            window.alert("Оновлення відбулося за " + time + " мс.");
             console.log(response);
+            window.location.reload();
         });
-
-        window.location.reload();
     };
 
     this.getArtist = function getArtist(id){
